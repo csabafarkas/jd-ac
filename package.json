@@ -18,11 +18,11 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "CI= react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://localhost:4242",
+  "proxy": "https://elated-torvalds-69c91d.netlify.app/.netlify/functions/server/",
   "eslintConfig": {
     "extends": "react-app"
   },

@@ -1,19 +1,14 @@
 import React, { useEffect, useReducer } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import LoadingSpinner from './LoadingSpinner';
+import axios from 'axios';
 
 const fetchCheckoutSession = async ({ id, quantity, url }) => {
-  return fetch('/create-checkout-session', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      id,
-      quantity,
-      url,
-    }),
-  }).then((res) => res.json());
+  const checkout = await axios.post('/create-checkout-session', {
+    id,
+    quantity,
+    url,
+  });
 };
 
 const formatPrice = (amount) => {
@@ -76,6 +71,8 @@ function reducer(state, action) {
 }
 
 const Checkout = () => {
+  axios.defaults.baseURL =
+    'https://elated-torvalds-69c91d.netlify.app/.netlify/functions/server';
   const [state, dispatch] = useReducer(reducer, {
     products: null,
     loading: false,
@@ -87,9 +84,9 @@ const Checkout = () => {
   useEffect(() => {
     async function fetchConfig() {
       // Fetch config from our backend.
-      const { publicKey, products } = await fetch('/config').then((res) =>
-        res.json()
-      );
+      const res = await axios.get('/config');
+      console.log(res);
+      const { publicKey, products } = res.data;
 
       products.forEach((p) => (p.unitAmount = formatPrice(p.unitAmount)));
       // Make sure to call `loadStripe` outside of a component’s render to avoid
@@ -124,10 +121,6 @@ const Checkout = () => {
     }
   };
 
-  console.log(
-    'sorted',
-    state.products?.sort((p, p1) => p.index - p.index)
-  );
   const products = state.products
     ? state.products
         .sort(

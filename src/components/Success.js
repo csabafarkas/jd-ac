@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useHistory } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import axios from 'axios';
 
 const Success = ({ completeProgress }) => {
@@ -7,6 +7,8 @@ const Success = ({ completeProgress }) => {
   const location = useLocation();
   const sessionId = location.search.replace('?session_id=', '');
   const history = useHistory();
+  axios.defaults.baseURL =
+    'https://elated-torvalds-69c91d.netlify.app/.netlify/functions/server';
 
   useEffect(() => {
     async function fetchSession() {
@@ -45,6 +47,7 @@ const Success = ({ completeProgress }) => {
           className='booking'
           height='460px'
           width='370px'
+          title='garage-assistant-booking'
           src='https://www.garage-booking-live.com/start.php?uid=BFE3596F5AB170B87D48OLBS'
         ></iframe>
         <script
